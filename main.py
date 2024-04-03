@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Body
+from fastapi import FastAPI,Path, Query
 # response HTML
 from fastapi.responses import HTMLResponse
 # import model data
@@ -28,9 +28,9 @@ def get_movies() -> list[Movie]:
 
 
 @app.get('/movies/{id}', tags=['Movies'])
-def get_movie(id: int) -> Movie:
+def get_movie(id: int = Path(gt=0)) -> Movie | dict[str, str]:
     for movie in movies:
-        if movie['id'] == id:
+        if movie.id == id:
             return movie.model_dump()
     else:
         return {'message': 'Movie not found'}
@@ -39,9 +39,9 @@ def get_movie(id: int) -> Movie:
 
 
 @app.get('/movies/', tags=['Movies'])
-def get_movie_by_category(category: str, year: int) -> Movie:
+def get_movie_by_category(category: str = Query(min_length=5, max_length=20)) -> Movie | dict[str, str]:
     for movie in movies:
-        if movie['category'] == category and movie['year'] == year:
+        if movie.category == category:
             return movie.model_dump()
     else:
         return {'message': 'Movie not found'}
