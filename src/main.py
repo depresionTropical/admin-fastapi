@@ -26,7 +26,7 @@ templates = Jinja2Templates(directory=template_path)
 @app.middleware('http')
 async def http_error_handler(request: Request, call_next) -> JSONResponse | Response:
     try:
-        print('request:', request)
+        # print('request:', request)
         return await call_next(request)
     except Exception as e:
         content = {'message': str(e)}
@@ -35,7 +35,8 @@ async def http_error_handler(request: Request, call_next) -> JSONResponse | Resp
 
 @app.get('/', tags=['Home'])
 def home(request: Request):
-    return templates.TemplateResponse('index.html', {'request': request, 'title': 'Home'})
+    # return templates.TemplateResponse('index.html', {'request': request, 'title': 'holaaaaaaaa'})
+    return RedirectResponse(url='/docs')
 
 def common_params(start_date: str, end_date: str):
     return {'start_date': start_date, 'end_date': end_date}
