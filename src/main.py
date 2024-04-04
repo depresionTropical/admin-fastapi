@@ -7,6 +7,8 @@ from typing import Annotated
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import os
+from src.depends.comon_deps import Common_Params
+
 # create an instance of the FastAPI class
 app = FastAPI()
 
@@ -39,8 +41,8 @@ def common_params(start_date: str, end_date: str):
     return {'start_date': start_date, 'end_date': end_date}
 
 @app.get('/users/')
-def get_users(commons: Annotated[dict, Depends(common_params)]):
-    return f"Users from {commons['start_date']} to {commons['end_date']}"
+def get_users(commons: Common_Params = Depends(Common_Params)):
+    return f"Users from {commons.start_date} to {commons.end_date }"
 
 @app.get('/custumers/')
 def get_users(start_date: str, end_date: str):
